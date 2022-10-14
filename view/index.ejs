@@ -11,8 +11,10 @@
     <% if(blogs.length > 0){ %> 
         <% blogs.forEach(blog=>{ %> 
         <div class="post">
+            <a href="/blogs/<%-blog._id %> ">
         <h3><%- blog.title %> </h3>
         <p class="snip"><%- blog.snippet %> </p>
+    </a>
         <% }) %> 
   <% } else{%> 
     <h4>Nothing to show </h4>

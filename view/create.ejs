@@ -7,15 +7,15 @@
    <div class="create-blogs contain">
     <h2>Create Post</h2>
 
-    <form>
+    <form action="/blogs" method="POST">
         <div class="form">
         <label for="title">Blog title</label>
        
-        <input type="text" id="title" required> </div> <div class="form">
+        <input type="text" id="title" name="title" required> </div> <div class="form">
         <label for="title">Blog snippet</label>
-            <input type="text" id="snippet" required></div> <div class="form">
+            <input type="text" id="snippet" name="snippet" required></div> <div class="form">
         <label for="title">Blog body</label>
-        <input type="text" id="body" required></div>
+        <input type="text" id="body" name="body" required></div>
         <button>
             submit
         </button>

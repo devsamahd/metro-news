@@ -1,8 +1,14 @@
 const express = require('express')
 const fs = require('fs')
 const path = require('path')
-const { nextTick } = require('process')
+const mongoose = require('mongoose')
+const Blog = require('./models/blog')
+const { render } = require('ejs')
 const app = express()
+const dburi = 'mongodb+srv://metroadmin:metroadmin\@nodetuts.1lgtazt.mongodb.net/nodetuts?retryWrites=true&w=majority'
+mongoose.connect(dburi,{useNewUrlParser: true, useUnifiedTopology: true})
+.then(res => app.listen(3500))
+.catch(err => console.log(err))
 //register view engine
 app.set('view engine', 'ejs')
 app.set('views', 'view')
@@ -10,10 +16,39 @@ app.set('views', 'view')
 const d = new Date()
 const date = d.getFullYear()
 
-
 //middleware &static files
-app.use(express.static('public'))
+app.use(express.static(__dirname + '/public'))
+app.use(express.urlencoded({extended:true}))
 
+//mongoose and mongo
+app.get('/add-blog',(req, res) => {
+    const blog = new Blog({
+        title:'new blog',
+        snippet:'about my new blog',
+        body: 'more about my blog'
+    })
+
+    blog.save()
+    .then(result => {
+        res.send(result)
+    }).catch(err=>{
+        console.log(err)
+    })
+})
+app.get('/all-blogs', (req,res)=>{
+    Blog.find()
+    .then(resp => {
+        res.setHeader('Access-Control-Allow-Origin', '*')
+        res.send(resp)
+    }).catch(err => console.log(err))
+})
+
+app.get('single-blog', (req,res)=>{
+    Blog.findById('')
+    .then(resp => res.send(resp)).catch(err => console.log(err))
+})
+
+//routes
 app.use((req,res,next)=>{
     if(!fs.existsSync(path.join(__dirname,"logs"))){
         fs.mkdir(path.join(__dirname,'logs'),()=>{
@@ -32,22 +67,39 @@ app.use((req,res,next)=>{
     
 })
 
-const blogs = [
-    {title: 'post 1', snippet:'something to say 1'},
-    {title: 'post 2', snippet:'something to say 2'},
-    {title: 'post 3', snippet:'something to say 3'}
-]
+
 
 app.get('/',(req, res)=> {
-    console.log(req.url, req.method)
-    // res.sendFile(path.join(__dirname, 'view', 'index.html'))
-    //render a view 
-    res.render('index', {title: 'Home', blogs, date})
+   res.redirect('/blogs')
+})
+app.get('/blogs/:id',(req, res)=>{
+    const id = req.params.id
+    Blog.findById(id)
+    .then(ress => {
+        res.render('details', {blog:ress, title:'blog details', date})
+    }).catch(err=> console.log(err))
 })
 app.get('/about',(req, res)=> {
     console.log(req.url, req.method)
     // res.sendFile(path.join(__dirname, 'view', 'about.html'))
     res.render('about', {title: 'About', date})
+})
+app.post('/blogs',(req, res)=>{
+    const blog = new Blog(req.body)
+    blog.save()
+    .then(resp => {
+        res.redirect('/blogs')
+    }).catch(err=> console.log(err))
+})
+
+
+
+//blog routes
+app.get('/blogs', (req, res)=>{
+    Blog.find().sort({createdAt: -1})
+    .then(blogs => {
+        res.render('index', {title: 'All blogs', blogs, date})
+    }).catch(err => console.log(err))
 })
 app.get('/blogs/create', (req, res)=>{
     res.render('create', {title: 'create post', date})
@@ -60,4 +112,3 @@ app.use((req, res)=>{
     res.status(404).sendFile(path.join(__dirname, 'view', '404.html'))
 })
 
-app.listen(3500)
