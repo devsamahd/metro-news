@@ -1,0 +1,83 @@
+@import url(https://fonts.googleapis.com/css?family=Audiowide);
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+h2{
+    font-family: audiowide;
+}
+body{
+    display: flex;
+    padding: 30px;
+}
+.contain{
+    margin-top: 20px;
+    margin-left: 40px;
+}
+footer{
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 20px    ;
+    background-color: rgb(2, 2, 34);
+    width: 100%;
+    height: 25px;
+    left: 0;
+    padding-left: 20px;
+    color: aliceblue;
+    font-weight: 500;
+}
+.snip{
+    color:gray;
+}
+.post{
+    padding-top: 30px;
+}
+.li{
+    list-style:none;
+    padding-top: 20px;
+    font-weight: 500;
+    font-size: larger;
+}
+.li a{
+    text-decoration: none;
+    color: grey;
+}
+.li a:hover{
+    color: rgb(2, 2, 34);
+}
+.site-title a{
+    font-size: 30px;
+    text-decoration: none;
+    color:rgb(2, 2, 34)
+}
+nav{
+    top: 0;
+    padding-top: 0;
+}
+form{
+    display: flex;
+    float: left;
+    flex-direction: column;
+}
+.form{
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+
+}
+button{
+    margin-top: 10px;
+    width: 100px;
+    height: 50px;
+    color: white;
+    background-color: rgb(2, 2, 34);
+    font-size: 15px;
+    border: 0;
+    border-radius: 5px;
+    cursor:cell;
+}
+form input{
+    width:300px;
+    height:30px;
+}
